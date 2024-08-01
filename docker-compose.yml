@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+    api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: owow_backend:${OWOW_BACKEND_VERSION:-latest}
+        restart: always
+        env_file:
+        -   .env
+        depends_on:
+            db:
+                condition: service_healthy
+        environment:
+            HOST: ${HOST:-0.0.0.0}
+            PORT: ${PORT:-8000}
+            WORKERS_COUNT: ${WORKERS_COUNT:-1}
+            RELOAD: ${RELOAD:-false}
+            ENVIRONMENT: ${ENVIRONMENT:-DEV}
+            LOG_LEVEL: ${LOG_LEVEL:-INFO}
+            OPENTELEMETRY_ENDPOINT: ${OPENTELEMETRY_ENDPOINT:-}
+            MONGO_HOST: mongodb://db:27017
+            PREDIBASE_TOKEN: ${PREDIBASE_TOKEN}
+        ports:
+        -   "${PORT:-8000}:${PORT:-8000}"
+
+    db:
+        image: mongo:7.0
+        hostname: db
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${DB_USER:-root}
+            MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS:-password}
+        volumes:
+        -   owow_backend-db-data:/data/db
+        healthcheck:
+            test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+            interval: 10s
+            timeout: 5s
+            retries: 40
+
+volumes:
+    owow_backend-db-data:
+        name: owow_backend-db-data
