@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     log_level: LogLevel = LogLevel.INFO
     opentelemetry_endpoint: Optional[str] = None
     mongo_host: str = "mongodb://localhost:27017"
-    predibase_token: str
+    predibase_token: Optional[str] = None
 
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -66,20 +66,20 @@ async def client(
 
 
 @pytest.fixture(scope="session")
-def settings():
+def settings() -> Settings:
     return Settings(mongo_host="mongodb://localhost:27017", environment="TEST", predibase_token="test_token")
 
 
 @pytest.fixture(scope="session")
-async def init_db(settings):
-    client = AsyncIOMotorClient(settings.mongo_host)
+async def init_db(settings: Settings) -> AsyncGenerator[None, None]:
+    client = AsyncIOMotorClient(settings.mongo_host)  # type: ignore
     await init_beanie(database=client.test_db, document_models=[UserDocument, FileDocument])
     yield
     await client.drop_database("test_db")
 
 
 @pytest.fixture(scope="function")
-async def clean_db(init_db):
+async def clean_db(init_db: None) -> AsyncGenerator[None, None]:
     yield
     await UserDocument.delete_all()
     await FileDocument.delete_all()
