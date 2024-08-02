@@ -10,6 +10,10 @@ jobs:
         runs-on: ubuntu-latest
         container: catthehacker/ubuntu:act-latest
         steps:
+        -   name: Start MongoDB
+            uses: supercharge/mongodb-github-action@1.11.0
+            with:
+                mongodb-version: 7.0
         -   name: Check out repository
             uses: actions/checkout@v4
 
