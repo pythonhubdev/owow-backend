@@ -47,7 +47,13 @@ jobs:
             if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
             run: poetry install --no-interaction
 
+        -   name: Verify MongoDB Connection
+            run: |
+                sudo apt-get install -y mongodb-clients
+                mongosh --eval "db.adminCommand('ping')"
+
         -   name: Run pytest check
             run: poetry run pytest -vv --cov="owow_backend" tests
             env:
                 host: "0.0.0.0"
+                MONGODB_URL: mongodb://mongodb:27017
