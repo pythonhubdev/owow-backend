@@ -9,11 +9,12 @@ jobs:
     test:
         runs-on: ubuntu-latest
         container: catthehacker/ubuntu:act-latest
+        services:
+            mongodb:
+                image: mongo:4.4
+                ports:
+                -   27017:27017
         steps:
-        -   name: Start MongoDB
-            uses: supercharge/mongodb-github-action@1.11.0
-            with:
-                mongodb-version: 7.0
         -   name: Check out repository
             uses: actions/checkout@v4
 
