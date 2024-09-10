@@ -7,43 +7,43 @@ docs_router = APIRouter(tags=["Docs"])
 
 @docs_router.get("/docs", include_in_schema=False)
 async def swagger_ui_html(request: Request) -> HTMLResponse:
-    """
-    Swagger UI.
+	"""
+	Swagger UI.
 
-    :param request: current request.
-    :return: rendered swagger UI.
-    """
-    title = request.app.title
-    return get_swagger_ui_html(
-        openapi_url=request.app.openapi_url,
-        title=f"{title} - Swagger UI",
-        oauth2_redirect_url=str(request.url_for("swagger_ui_redirect")),
-        swagger_js_url="/static/docs/swagger-ui-bundle.js",
-        swagger_css_url="/static/docs/swagger-ui.css",
-    )
+	:param request: current request.
+	:return: rendered swagger UI.
+	"""
+	title = request.app.title
+	return get_swagger_ui_html(
+		openapi_url=request.app.openapi_url,
+		title=f"{title} - Swagger UI",
+		oauth2_redirect_url=str(request.url_for("swagger_ui_redirect")),
+		swagger_js_url="/static/docs/swagger-ui-bundle.js",
+		swagger_css_url="/static/docs/swagger-ui.css",
+	)
 
 
 @docs_router.get("/swagger-redirect", include_in_schema=False)
 async def swagger_ui_redirect() -> HTMLResponse:
-    """
-    Redirect to swagger.
+	"""
+	Redirect to swagger.
 
-    :return: redirect.
-    """
-    return get_swagger_ui_oauth2_redirect_html()
+	:return: redirect.
+	"""
+	return get_swagger_ui_oauth2_redirect_html()
 
 
 @docs_router.get("/redoc", include_in_schema=False)
 async def redoc_html(request: Request) -> HTMLResponse:
-    """
-    Redoc UI.
+	"""
+	Redoc UI.
 
-    :param request: current request.
-    :return: rendered redoc UI.
-    """
-    title = request.app.title
-    return get_redoc_html(
-        openapi_url=request.app.openapi_url,
-        title=f"{title} - ReDoc",
-        redoc_js_url="/static/docs/redoc.standalone.js",
-    )
+	:param request: current request.
+	:return: rendered redoc UI.
+	"""
+	title = request.app.title
+	return get_redoc_html(
+		openapi_url=request.app.openapi_url,
+		title=f"{title} - ReDoc",
+		redoc_js_url="/static/docs/redoc.standalone.js",
+	)

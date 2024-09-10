@@ -10,59 +10,59 @@ from owow_backend.settings import settings
 
 
 class OpenTelemetry:
-    @staticmethod
-    def setup_opentelemetry(app: FastAPI) -> None:  # pragma: no cover
-        """
-        Enables opentelemetry instrumentation.
+	@staticmethod
+	def setup_opentelemetry(app: FastAPI) -> None:  # pragma: no cover
+		"""
+		Enables opentelemetry instrumentation.
 
-        :param app: current application.
-        """
-        if not settings.opentelemetry_endpoint:
-            return
+		:param app: current application.
+		"""
+		if not settings.opentelemetry_endpoint:
+			return
 
-        tracer_provider = TracerProvider(
-            resource=Resource(
-                attributes={
-                    SERVICE_NAME: "owow_backend",
-                    TELEMETRY_SDK_LANGUAGE: "python",
-                    DEPLOYMENT_ENVIRONMENT: settings.environment,
-                },
-            ),
-        )
+		tracer_provider = TracerProvider(
+			resource=Resource(
+				attributes={
+					SERVICE_NAME: "owow_backend",
+					TELEMETRY_SDK_LANGUAGE: "python",
+					DEPLOYMENT_ENVIRONMENT: settings.environment,
+				},
+			),
+		)
 
-        tracer_provider.add_span_processor(
-            BatchSpanProcessor(
-                OTLPSpanExporter(
-                    endpoint=settings.opentelemetry_endpoint,
-                    insecure=True,
-                ),
-            ),
-        )
+		tracer_provider.add_span_processor(
+			BatchSpanProcessor(
+				OTLPSpanExporter(
+					endpoint=settings.opentelemetry_endpoint,
+					insecure=True,
+				),
+			),
+		)
 
-        excluded_endpoints = [
-            app.url_path_for("health_check"),
-            app.url_path_for("openapi"),
-            app.url_path_for("swagger_ui_html"),
-            app.url_path_for("swagger_ui_redirect"),
-            app.url_path_for("redoc_html"),
-        ]
+		excluded_endpoints = [
+			app.url_path_for("health_check"),
+			app.url_path_for("openapi"),
+			app.url_path_for("swagger_ui_html"),
+			app.url_path_for("swagger_ui_redirect"),
+			app.url_path_for("redoc_html"),
+		]
 
-        FastAPIInstrumentor().instrument_app(
-            app,
-            tracer_provider=tracer_provider,
-            excluded_urls=",".join(excluded_endpoints),
-        )
+		FastAPIInstrumentor().instrument_app(
+			app,
+			tracer_provider=tracer_provider,
+			excluded_urls=",".join(excluded_endpoints),
+		)
 
-        set_tracer_provider(tracer_provider=tracer_provider)
+		set_tracer_provider(tracer_provider=tracer_provider)
 
-    @staticmethod
-    def stop_opentelemetry(app: FastAPI) -> None:  # pragma: no cover
-        """
-        Disables opentelemetry instrumentation.
+	@staticmethod
+	def stop_opentelemetry(app: FastAPI) -> None:  # pragma: no cover
+		"""
+		Disables opentelemetry instrumentation.
 
-        :param app: current application.
-        """
-        if not settings.opentelemetry_endpoint:
-            return
+		:param app: current application.
+		"""
+		if not settings.opentelemetry_endpoint:
+			return
 
-        FastAPIInstrumentor().uninstrument_app(app)
+		FastAPIInstrumentor().uninstrument_app(app)

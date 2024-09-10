@@ -19,4 +19,4 @@ services:
         hostname: jaeger
         ports:
       # Jaeger UI
-        -   16686:16686
+        -   "16686:16686"

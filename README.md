@@ -1,22 +1,22 @@
 # OWOW Backend
 
-## Poetry
+A Python backend service that leverages Predibase to extract and summarize key points from PDF, PPT, and DOCX files.
+Seamlessly integrates with your application to provide concise, actionable insights from document contents.
 
-This project uses poetry. It's a modern dependency management
-tool.
+# Run with UV
 
-To run the project use this set of commands:
-
+- Install uv
 ```bash
-poetry install
-poetry run python -m 1
+curl -sSf https://rye.astral.sh/get | bash
 ```
-
-This will start the server on the configured host.
-
-You can find swagger documentation at `/api/docs`.
-
-You can read more about poetry here: https://python-poetry.org/
+- Sync Packages
+```bash
+rye sync
+```
+- Run the project
+```bash
+rye run python -m owow_backend
+```
 
 ## Docker
 
@@ -35,8 +35,6 @@ docker-compose -f docker-compose.yml -f deploy/docker-compose.dev.yml --project-
 ```
 
 This command exposes the web application on port 8000, mounts current directory and enables autoreload.
-
-But you have to rebuild image every time you modify `poetry.lock` or `pyproject.toml` with this command:
 
 ```bash
 docker-compose build

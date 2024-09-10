@@ -15,52 +15,52 @@ APP_ROOT = Path(__file__).parent.parent
 
 
 def get_app() -> FastAPI:
-    """
-    Get FastAPI application.
+	"""
+	Get FastAPI application.
 
-    This is the main constructor of an application.
+	This is the main constructor of an application.
 
-    :return: application.
-    """
-    app = FastAPI(
-        title="OWOW Backend",
-        version=metadata.version("owow-backend"),
-        docs_url=None,
-        redoc_url=None,
-        openapi_url="/api/openapi.json",
-        default_response_class=ORJSONResponse,
-        lifespan=lifespan,
-    )
+	:return: application.
+	"""
+	app = FastAPI(
+		title="OWOW Backend",
+		version=metadata.version("owow-backend"),
+		docs_url=None,
+		redoc_url=None,
+		openapi_url="/api/openapi.json",
+		default_response_class=ORJSONResponse,
+		lifespan=lifespan,
+	)
 
-    app.add_middleware(
-        CORSMiddleware,  # type: ignore
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-    app.add_middleware(LoggingMiddleware)  # type: ignore
+	app.add_middleware(
+		CORSMiddleware,  # type: ignore
+		allow_origins=["*"],
+		allow_credentials=True,
+		allow_methods=["*"],
+		allow_headers=["*"],
+	)
+	app.add_middleware(LoggingMiddleware)  # type: ignore
 
-    app.include_router(router=api_router, prefix="/api")
+	app.include_router(router=api_router, prefix="/api")
 
-    app.mount(
-        "/static",
-        StaticFiles(directory=APP_ROOT / "static"),
-        name="static",
-    )
+	app.mount(
+		"/static",
+		StaticFiles(directory=APP_ROOT / "static"),
+		name="static",
+	)
 
-    @app.get("/", tags=["Root"], **DEFAULT_ROUTE_OPTIONS)
-    def read_root() -> APIResponse:
-        return APIResponse(
-            status=StatusEnum.SUCCESS,
-            message="Welcome to OWOW Backend!!",
-            data={
-                "ping": "pong",
-            },
-        )
+	@app.get("/", tags=["Root"], **DEFAULT_ROUTE_OPTIONS)
+	def read_root() -> APIResponse:
+		return APIResponse(
+			status=StatusEnum.SUCCESS,
+			message="Welcome to OWOW Backend!!",
+			data={
+				"ping": "pong",
+			},
+		)
 
-    configure_logging()
-    return app
+	configure_logging()
+	return app
 
 
 owow_app: FastAPI = get_app()

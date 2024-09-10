@@ -1,24 +1,24 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any
 
 
 class HTTPRepository(ABC):
-    @abstractmethod
-    def set_base_url(self, base_url: str) -> None:
-        pass
+	@abstractmethod
+	def set_base_url(self, base_url: str) -> None:
+		pass
 
-    @abstractmethod
-    def get(self, endpoint: str, params: Optional[dict[str, Any]] = None) -> Any:
-        pass
+	@abstractmethod
+	def get(self, endpoint: str, params: dict[str, Any] | None = None) -> Any:
+		pass
 
-    @abstractmethod
-    def post(self, endpoint: str, data: Optional[dict[str, Any]] = None, json: Optional[dict[str, Any]] = None) -> Any:
-        pass
+	@abstractmethod
+	def post(self, endpoint: str, data: dict[str, Any] | None = None, json: dict[str, Any] | None = None) -> Any:
+		pass
 
-    @abstractmethod
-    def put(self, endpoint: str, data: Optional[dict[str, Any]] = None, json: Optional[dict[str, Any]] = None) -> Any:
-        pass
+	@abstractmethod
+	def put(self, endpoint: str, data: dict[str, Any] | None = None, json: dict[str, Any] | None = None) -> Any:
+		pass
 
-    @abstractmethod
-    def delete(self, endpoint: str) -> Any:
-        pass
+	@abstractmethod
+	def delete(self, endpoint: str) -> Any:
+		pass
